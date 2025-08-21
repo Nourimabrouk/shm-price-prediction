@@ -1,0 +1,55 @@
+tech-case instructions
+SHM is a company that buys and sells secondhand machinery.
+Currently, the sales price of a machine is determined by an
+expert that has worked at the company for a long time, and
+therefore has a 'feeling' for the worth of a machine.
+However, the expert is retiring and thus SHM is looking for an
+alternative way to determine the sales price. Luckily, they have
+a lot of historical data about the properties of the machines
+and their pricing.
+Since they have heard that machine learning is the next big
+thing, they turn to Bit with the assignment to setup a possible
+approach if and how the price could be predicted.
+bit
+Assignment You will be provided with the historical dataset. We ask
+you to perform the following tasks.
+Analyse the dataset and the features. Report a maximum of 5 things that
+stand out and warrant special attention.
+Your report should contain the following:
+O Analysis of the features and target
+Your steps on how you would preprocess the dataset
+이 Your model(s) choice and explanation for this decision
+Ο Your steps on how you would evaluate the model(s)
+이 The (rough) time allocation for each components of the approach
+We expect you to deliver:
+이 Code to run the analysis. Can be an export of a notebook.
+Report with your approach as explained in the above bullet points.
+bit
+hours data analysis
+1~2
+2~3
+1~2 hours to create the report
+Points of attention
+Make sure you also explain why your approach is a good decision for this
+case
+Be creative!
+~2 hours data analysis
+~1 hour to create the report
+Requirements of the program
+Report can be delivered in any form (word, latex etc.) as long as the
+structure is clear
+Python Notebook with all the output included
+Good luck
+Assignment You will be provided with the historical dataset. We ask
+you to perform the following tasks.
+Analyse the dataset and the features. Report a maximum of 5 things that
+stand out and warrant special attention.
+Your report should contain the following:
+O Analysis of the features and target
+Your steps on how you would preprocess the dataset
+이 Your model(s) choice and explanation for this decision
+Ο Your steps on how you would evaluate the model(s)
+이 The (rough) time allocation for each components of the approach
+We expect you to deliver:
+이 Code to run the analysis. Can be an export of a notebook.
+Report with your approach a

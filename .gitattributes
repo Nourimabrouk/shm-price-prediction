@@ -1,0 +1,2 @@
+* text=auto
+data/raw/Bit_SHM_data.csv filter=lfs diff=lfs merge=lfs -text
