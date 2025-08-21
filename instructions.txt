@@ -1,3 +1,10 @@
+<!-- 
+⚠️ NOTICE: AI Agent Context File
+This file contains the original tech case instructions for reference.
+It serves as context for AI agents working on this assessment project.
+Human readers: This is the original WeAreBit technical challenge brief.
+-->
+
 # SHM Heavy Equipment Price Prediction - Tech Case
 
 ## Business Context

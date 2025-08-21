@@ -1,3 +1,10 @@
+<!-- 
+⚠️ NOTICE: This file contains AI agent instructions and configuration
+This document exists primarily to guide AI coding agents working in this codebase.
+Human developers may find it useful for understanding system architecture,
+but it is specifically designed for automated AI agent collaboration.
+-->
+
 # Repository Guidelines
 
 ## Project Structure & Modules
