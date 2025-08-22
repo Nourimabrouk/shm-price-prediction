@@ -83,8 +83,8 @@ def create_sophisticated_baselines(df: pd.DataFrame, target_col: str = 'sales_pr
     if product_group_col and age_col and date_col in df.columns:
         # Multi-factor baseline
         combined_pred = []
-        for _, row in df.iterrows():
-            base_price = baselines['group_median'][_] if not pd.isna(baselines['group_median'][_]) else global_median
+        for idx, row in df.reset_index(drop=True).iterrows():
+            base_price = baselines['group_median'][idx] if not pd.isna(baselines['group_median'][idx]) else global_median
             
             # Age adjustment factor (newer = higher price)
             age = row[age_col] if pd.notna(row[age_col]) else df[age_col].median()
@@ -261,7 +261,7 @@ def evaluate_uncertainty_quantification(y_true: np.ndarray, y_pred: np.ndarray,
 def _get_uncertainty_use_case_recommendation(coverage: float, relative_width: float) -> str:
     """Recommend use cases based on uncertainty quality."""
     if coverage >= 0.75 and relative_width <= 25:
-        return "Production-ready for high-stakes pricing decisions"
+        return "Suitable for high-stakes pricing decisions with additional validation"
     elif coverage >= 0.7 and relative_width <= 35:
         return "Suitable for decision support and risk assessment"
     elif coverage >= 0.6:
@@ -272,7 +272,7 @@ def _get_uncertainty_use_case_recommendation(coverage: float, relative_width: fl
 class ModelEvaluator:
     """Comprehensive model evaluation for business contexts."""
     
-    def __init__(self, output_dir: str = "./plots/"):
+    def __init__(self, output_dir: str = "./outputs/figures/"):
         """Initialize evaluator with output directory.
         
         Args:
@@ -1007,7 +1007,7 @@ class ModelEvaluator:
             'estimated_econometric_value': {
                 'rmse_improvement_potential': f"{estimated_rmse_improvement:.1%}",
                 'accuracy_improvement_potential': f"{estimated_accuracy_improvement:.1f} percentage points",
-                'model_sophistication': "PhD-level econometric modeling" if econ_share > 30 else "Advanced statistical modeling"
+                'model_sophistication': "Advanced econometric modeling" if econ_share > 30 else "Advanced statistical modeling"
             },
             'business_benefits': [
                 "Non-linear depreciation modeling captures real-world asset behavior",
@@ -1051,7 +1051,7 @@ class ModelEvaluator:
         recommendations.extend([
             "[TARGET] Consider ensemble methods to leverage econometric feature diversity",
             "[EVAL] Monitor feature importance changes over time for model stability",
-            "🧪 Experiment with polynomial interactions for non-linear relationships"
+            "[EXPERIMENTAL] Experiment with polynomial interactions for non-linear relationships"
         ])
         
         return recommendations[:8]  # Limit to most important recommendations
@@ -1060,7 +1060,7 @@ class ModelEvaluator:
 def evaluate_model_comprehensive(y_true: np.array, y_pred: np.array, 
                                 model_name: str = "Model",
                                 feature_importance: Optional[List[Dict]] = None,
-                                output_dir: str = "./plots/",
+                                output_dir: str = "./outputs/figures/",
                                 include_intervals: bool = True) -> Dict[str, any]:
     """Comprehensive model evaluation with all visualizations and metrics.
     
@@ -1109,7 +1109,7 @@ def evaluate_model_comprehensive(y_true: np.array, y_pred: np.array,
     print(f"{'='*60}")
     print(f"RMSE: ${metrics['rmse']:,.0f}")
     print(f"Within 15% Accuracy: {metrics['within_15_pct']:.1f}%")
-    print(f"R² Score: {metrics['r2']:.3f}")
+    print(f"R2 Score: {metrics['r2']:.3f}")
     print(f"MAPE: {metrics['mape']:.1f}%")
     
     if prediction_intervals:
@@ -1131,7 +1131,7 @@ def evaluate_model_comprehensive(y_true: np.array, y_pred: np.array,
 
 if __name__ == "__main__":
     # Test the evaluation module
-    print("✓ Evaluation module loaded successfully")
+    print("[OK] Evaluation module loaded successfully")
 
 def plot_actual_vs_pred(y_true: np.ndarray,
                         preds: Dict[str, np.ndarray],

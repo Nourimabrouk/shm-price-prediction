@@ -13,7 +13,7 @@ warnings.filterwarnings('ignore')
 class SHMPlotGenerator:
     """Generate professional visualizations for SHM equipment data analysis."""
     
-    def __init__(self, output_dir: str = "./plots/"):
+    def __init__(self, output_dir: str = "./outputs/figures/"):
         """Initialize plot generator with styling."""
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
@@ -125,7 +125,7 @@ class SHMPlotGenerator:
 
 
 def create_all_eda_plots(df: pd.DataFrame, key_findings: List[Dict], 
-                         output_dir: str = "./plots/") -> Dict[str, str]:
+                         output_dir: str = "./outputs/figures/") -> Dict[str, str]:
     """Generate all EDA visualizations for the SHM dataset."""
     plotter = SHMPlotGenerator(output_dir)
     
@@ -141,4 +141,4 @@ def create_all_eda_plots(df: pd.DataFrame, key_findings: List[Dict],
 
 
 if __name__ == "__main__":
-    print("✓ Plots module loaded successfully")
+    print("[OK] Plots module loaded successfully")

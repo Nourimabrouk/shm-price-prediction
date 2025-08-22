@@ -65,7 +65,14 @@ class EnhancedVisualizationSuite:
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.dpi = dpi
         self.plotly_theme = "plotly_white"
-        self.color_sequence = px.colors.qualitative.Set2
+        # Use Plotly color sequence when available; otherwise provide a safe fallback
+        if PLOTLY_AVAILABLE:
+            self.color_sequence = px.colors.qualitative.Set2
+        else:
+            self.color_sequence = [
+                "#1f77b4", "#ff7f0e", "#2ca02c",
+                "#d62728", "#9467bd", "#8c564b"
+            ]
         
         # Set consistent themes
         set_viz_theme()

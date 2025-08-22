@@ -1,0 +1,36 @@
+{
+  "model_type": "Random Forest (Simplified)",
+  "features_used": [
+    "year_made",
+    "sale_year",
+    "age_years",
+    "product_group",
+    "state_of_usage"
+  ],
+  "sample_size": 5000,
+  "test_size": 1000,
+  "temporal_split": true,
+  "metrics": {
+    "mae": 13813.325783533706,
+    "rmse": 19956.76041607676,
+    "mape": 51.33937103590866,
+    "r2": 0.33981351861708775,
+    "within_10_pct": 15.0,
+    "within_15_pct": 22.900000000000002,
+    "within_25_pct": 38.3,
+    "test_samples": 1000,
+    "mean_actual": 32733.95,
+    "mean_predicted": 29834.32552692769
+  },
+  "business_assessment": {
+    "readiness": "NEEDS IMPROVEMENT",
+    "grade": "D",
+    "deployment_recommendation": "Model achieves 22.9% accuracy within 15% tolerance"
+  },
+  "validation_notes": [
+    "Used temporal split to prevent data leakage",
+    "Simple feature set to avoid overfitting",
+    "Realistic sample size for reliable metrics",
+    "Conservative modeling approach"
+  ]
+}

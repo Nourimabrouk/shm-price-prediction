@@ -38,13 +38,16 @@ warnings.filterwarnings('ignore')
 # === CORE IMPORTS ===
 try:
     from src.data_loader import SHMDataLoader
-    from src.models import EquipmentPricePredictor, EnsembleOrchestrator
+    from src.models import EquipmentPricePredictor, train_competition_grade_models
     from src.eda import analyze_shm_dataset
     from src.evaluation import evaluate_model_comprehensive
     from src.hybrid_pipeline import run_hybrid_pipeline
     from src.viz_enhanced import EnhancedVisualizationSuite
     from src.viz_suite import save_all_figures
-    from src.cli import discover_data_file, load_shm_data, train_competition_grade_models
+    # Import new leak-proof pipeline components
+    from src.leak_proof_pipeline import run_leak_proof_pipeline, LeakProofPipeline
+    from src.temporal_validation import create_shm_temporal_split
+    from src.leakage_tests import run_leakage_tests
 except ImportError as e:
     print(f"[ERROR] Failed to import core modules: {e}")
     print("Please ensure you're running from the project root directory")
@@ -69,7 +72,7 @@ class SHMConfig:
     
     # Model configuration
     OPTIMIZATION_TIME_BUDGET = 15  # minutes
-    QUICK_SAMPLE_SIZE = 5000
+    QUICK_SAMPLE_SIZE = 25000
     FULL_SAMPLE_SIZE = 20000
     
     # Visualization configuration
@@ -105,6 +108,30 @@ class SHMOrchestrator:
         print("Features: Temporal Validation | Econometric Features | Uncertainty Quantification")
         print("=" * 80)
     
+    def _discover_data_file(self) -> str:
+        """Discover the SHM dataset file in common locations.
+        Returns path as string or exits with error if not found.
+        """
+        default_paths = [
+            Path("data/raw/Bit_SHM_data.csv"),
+            Path("data/Bit_SHM_data.csv"),
+            Path("Bit_SHM_data.csv"),
+        ]
+        for p in default_paths:
+            if p.exists():
+                print(f"[DATA] Found SHM dataset: {p}")
+                return str(p)
+        for root in [Path("data"), Path(".")]:
+            if root.exists():
+                for cand in root.rglob("*SHM*.csv"):
+                    print(f"[DATA] Found SHM dataset: {cand}")
+                    return str(cand)
+                for cand in root.rglob("*.csv"):
+                    print(f"[DATA] Found CSV dataset: {cand}")
+                    return str(cand)
+        print("[ERROR] No SHM dataset found. Use --file to specify location.")
+        sys.exit(1)
+
     def discover_and_load_data(self, file_path: Optional[str] = None) -> Tuple[Any, Dict]:
         """Discover and load the SHM dataset with comprehensive validation."""
         print("\n[DATA] PHASE 1: DATA DISCOVERY AND LOADING")
@@ -112,11 +139,7 @@ class SHMOrchestrator:
         
         # Discover data file if not provided
         if not file_path:
-            try:
-                file_path = discover_data_file()
-            except SystemExit:
-                print("[ERROR] No SHM dataset found. Please specify --file path/to/data.csv")
-                sys.exit(1)
+            file_path = self._discover_data_file()
         
         # Validate file exists
         if not Path(file_path).exists():
@@ -180,10 +203,65 @@ class SHMOrchestrator:
         
         return results
     
+    def run_leak_proof_pipeline_integration(self, optimize: bool = False,
+                                           time_budget: int = None) -> Dict[str, Any]:
+        """Run the leak-proof pipeline with comprehensive temporal validation."""
+        print("\n[CRITICAL] PHASE 4: LEAK-PROOF PIPELINE WITH TEMPORAL VALIDATION")
+        print("-" * 50)
+        
+        time_budget = time_budget or self.config.OPTIMIZATION_TIME_BUDGET
+        
+        print("[CRITICAL] Running comprehensive temporal leakage elimination pipeline...")
+        print("[CRITICAL] Features: Strict temporal splits + Safe features + Time-aware encoding + Leakage tests")
+        
+        # Configure leak-proof pipeline
+        leak_proof_config = {
+            'temporal_split': {
+                'train_end_date': '2009-12-31',
+                'val_end_date': '2011-12-31', 
+                'test_start_date': '2012-01-01',
+                'date_column': 'sales_date'
+            },
+            'models': {
+                'types': ['catboost'] if optimize else ['random_forest', 'catboost'],
+            },
+            'validation': {
+                'strict_mode': True,
+                'enable_comprehensive_tests': True
+            },
+            'output': {
+                'save_artifacts': True,
+                'save_models': True,
+                'save_predictions': True
+            }
+        }
+        
+        # Run leak-proof pipeline
+        leak_proof_results = run_leak_proof_pipeline(
+            self.df,
+            output_dir=self.config.OUTPUT_DIR / "leak_proof_pipeline",
+            config=leak_proof_config
+        )
+        
+        self.results['leak_proof_pipeline'] = leak_proof_results
+        print("[OK] Leak-proof pipeline integration complete")
+        
+        # Print critical validation results
+        leakage_status = leak_proof_results['leakage_validation']['overall_status']
+        pipeline_status = leak_proof_results['pipeline_status']
+        
+        print(f"[VALIDATION] Leakage Status: {leakage_status}")
+        print(f"[VALIDATION] Pipeline Status: {pipeline_status}")
+        
+        if leakage_status != "NO_LEAKAGE_DETECTED":
+            print(f"[WARNING] Temporal leakage detected - see detailed report in outputs")
+        
+        return leak_proof_results
+    
     def run_hybrid_pipeline_integration(self, optimize: bool = False,
                                       time_budget: int = None) -> Dict[str, Any]:
         """Run the advanced hybrid pipeline combining all approaches."""
-        print("\n[TARGET] PHASE 4: HYBRID PIPELINE INTEGRATION")
+        print("\n[TARGET] PHASE 5: HYBRID PIPELINE INTEGRATION")
         print("-" * 50)
         
         time_budget = time_budget or self.config.OPTIMIZATION_TIME_BUDGET
@@ -205,7 +283,7 @@ class SHMOrchestrator:
     
     def perform_comprehensive_evaluation(self) -> Dict[str, Any]:
         """Perform comprehensive model evaluation with business metrics."""
-        print("\n[EVAL] PHASE 5: COMPREHENSIVE MODEL EVALUATION")
+        print("\n[EVAL] PHASE 6: COMPREHENSIVE MODEL EVALUATION")
         print("-" * 50)
         
         evaluation_results = {}
@@ -233,7 +311,7 @@ class SHMOrchestrator:
     
     def generate_comprehensive_visualizations(self) -> Dict[str, str]:
         """Generate comprehensive visualization suite."""
-        print("\n[VIZ] PHASE 6: COMPREHENSIVE VISUALIZATION GENERATION")
+        print("\n[VIZ] PHASE 7: COMPREHENSIVE VISUALIZATION GENERATION")
         print("-" * 50)
         
         print("[VIZ] Creating professional static visualizations...")
@@ -273,7 +351,7 @@ class SHMOrchestrator:
     def generate_executive_summary(self, evaluation_results: Dict[str, Any],
                                  saved_figures: Dict[str, str]) -> None:
         """Generate executive summary report."""
-        print("\n[SUCCESS] PHASE 7: EXECUTIVE SUMMARY GENERATION")
+        print("\n[SUCCESS] PHASE 8: EXECUTIVE SUMMARY GENERATION")
         print("-" * 50)
         
         # Best model identification
@@ -292,9 +370,10 @@ class SHMOrchestrator:
         capabilities = [
             f"✓ Processed {len(self.df):,} equipment auction records",
             f"✓ Advanced temporal validation prevents data leakage",
-            f"✓ Econometric feature engineering (PhD-level techniques)",
-            f"✓ Multiple ML models with hyperparameter optimization",
-            f"✓ Uncertainty quantification with prediction intervals",
+            f"✓ Advanced econometric feature engineering",
+            f"✓ LEAK-PROOF temporal validation system with comprehensive testing",
+            f"✓ Multiple ML models with optional hyperparameter tuning (sampled)",
+            f"✓ Uncertainty quantification with simple prediction intervals",
             f"✓ Business-focused metrics (±15%, ±25% tolerance)",
             f"✓ Professional visualization suite ({len(saved_figures)} files)",
             f"✓ Executive dashboards and technical analysis",
@@ -333,16 +412,19 @@ class SHMOrchestrator:
         # Phase 3: Model Training
         model_results = self.train_comprehensive_models(optimize=optimize)
         
-        # Phase 4: Hybrid Pipeline (advanced integration)
+        # Phase 4: Leak-Proof Pipeline (critical temporal validation)
+        leak_proof_results = self.run_leak_proof_pipeline_integration(optimize=optimize)
+        
+        # Phase 5: Hybrid Pipeline (advanced integration)
         hybrid_results = self.run_hybrid_pipeline_integration(optimize=optimize)
         
-        # Phase 5: Evaluation
+        # Phase 6: Evaluation
         evaluation_results = self.perform_comprehensive_evaluation()
         
-        # Phase 6: Visualizations
+        # Phase 7: Visualizations
         saved_figures = self.generate_comprehensive_visualizations()
         
-        # Phase 7: Executive Summary
+        # Phase 8: Executive Summary
         self.generate_executive_summary(evaluation_results, saved_figures)
         
         # Total time
@@ -362,6 +444,7 @@ class SHMOrchestrator:
         
         # Train single model
         print(f"\n[MODEL] Training single CatBoost model (sample: {self.config.QUICK_SAMPLE_SIZE})")
+        print("[CAUTION] Small sample demo - production metrics will differ significantly")
         predictor = EquipmentPricePredictor(model_type='catboost', random_state=42)
         
         sample_df = self.df.sample(min(self.config.QUICK_SAMPLE_SIZE, len(self.df)), 
@@ -412,6 +495,9 @@ class SHMOrchestrator:
         # Model training
         model_results = self.train_comprehensive_models(optimize=optimize)
         
+        # Leak-proof pipeline
+        leak_proof_results = self.run_leak_proof_pipeline_integration(optimize=optimize)
+        
         # Hybrid pipeline
         hybrid_results = self.run_hybrid_pipeline_integration(optimize=optimize)
         
@@ -438,7 +524,7 @@ Examples:
     
     parser.add_argument(
         '--mode', 
-        choices=['full', 'quick', 'analysis', 'modeling'],
+        choices=['full', 'quick', 'analysis', 'modeling', 'leak-proof'],
         default='full',
         help='Execution mode (default: full)'
     )
@@ -502,6 +588,12 @@ def main():
                 file_path=args.file, 
                 optimize=args.optimize
             )
+        elif args.mode == 'leak-proof':
+            # Dedicated leak-proof pipeline mode
+            print("[CRITICAL] LEAK-PROOF PIPELINE MODE - Focus on temporal validation")
+            orchestrator.discover_and_load_data(file_path=args.file)
+            leak_proof_results = orchestrator.run_leak_proof_pipeline_integration(optimize=args.optimize)
+            print(f"\n[SUCCESS] Leak-proof pipeline completed with status: {leak_proof_results['pipeline_status']}")
     
     except KeyboardInterrupt:
         print("\n[WARN] Process interrupted by user")
@@ -513,4 +605,13 @@ def main():
         sys.exit(1)
 
 if __name__ == "__main__":
-    main()
+    try:
+        sys.exit(main())
+    except KeyboardInterrupt:
+        print("\n\n🛑 Demo interrupted by user")
+        print("💡 Demo can be resumed with: python main.py --mode quick")
+        sys.exit(1)
+    except Exception as e:
+        print(f"\n🚨 FATAL ERROR: {e}")
+        print("💡 Check setup: python tools/dataset_validator.py")
+        sys.exit(1)

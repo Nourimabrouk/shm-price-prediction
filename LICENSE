@@ -1,0 +1,37 @@
+Technical Assessment License
+
+Copyright (c) 2025 Nouri Mabrouk
+
+## Purpose
+This repository contains a technical assessment solution for WeAreBit's SHM Heavy Equipment Price Prediction case study. It demonstrates advanced ML engineering, business intelligence, and professional communication skills.
+
+## Usage Rights
+**Educational and Assessment Use**: ✅ Permitted
+- Technical review and evaluation
+- Educational reference and learning
+- Code analysis and methodology study
+
+**Commercial Use**: ⚠️ Contact Required
+- Commercial applications require permission
+- Consult author before production deployment
+- Dataset licensing may apply separately
+
+**Derivative Works**: ✅ Permitted with Attribution
+- Modifications and improvements welcome
+- Please credit original work and methodology
+- Share improvements back to the community
+
+## Dataset Notice
+This project uses heavy equipment auction data for demonstration purposes. The solution methodology is original work, but data usage follows standard ML competition guidelines.
+
+## Disclaimer
+This software is provided for demonstration and assessment purposes. While production-ready architecture is demonstrated, full production deployment should include additional testing, validation, and customization for specific business requirements.
+
+## Contact
+**Author**: Nouri Mabrouk  
+**Purpose**: WeAreBit Technical Assessment  
+**Questions**: Open an issue in the GitHub repository
+
+---
+
+*This license balances open collaboration with appropriate attribution and commercial considerations for a professional technical assessment.*

@@ -53,6 +53,20 @@ except ImportError:
     
     CSV_PATH = "data/raw/Bit_SHM_data.csv"
 
+def _ensure_price_column(df: pd.DataFrame) -> pd.DataFrame:
+    """Ensure a numeric 'price' column exists by coalescing common alternatives.
+
+    This makes plotting functions resilient when called with raw dataframes
+    that use 'sales_price' or 'saleprice' instead of the canonical 'price'.
+    """
+    if 'price' not in df.columns:
+        for cand in ("sales_price", "saleprice", "price"):
+            if cand in df.columns and cand != 'price':
+                out = df.copy()
+                out['price'] = pd.to_numeric(out[cand], errors='coerce')
+                return out
+    return df
+
 def load_clean_df(path: str | Path = CSV_PATH) -> pd.DataFrame:
     """
     Load and clean data with consistent column naming and feature engineering.
@@ -152,6 +166,9 @@ def price_distribution_fig(df: pd.DataFrame) -> plt.Figure:
     - Professional styling
     """
     set_viz_theme()
+    df = _ensure_price_column(df)
+    if 'price' not in df.columns:
+        return None
     fig, axes = create_subplot_grid(1, 2, figsize=(14, 6))
     axes = axes.flatten()
     
@@ -188,6 +205,22 @@ def age_vs_price_fig(df: pd.DataFrame) -> plt.Figure:
     - Depreciation curve with percentile bands
     """
     set_viz_theme()
+    df = _ensure_price_column(df)
+    # Derive age_years if missing but ingredients are available
+    if 'age_years' not in df.columns:
+        sale_year = None
+        if 'sale_year' in df.columns:
+            sale_year = df['sale_year']
+        elif 'sales_date' in df.columns:
+            sale_year = pd.to_datetime(df['sales_date'], errors='coerce').dt.year
+        if sale_year is not None and 'year_made' in df.columns:
+            tmp = df.copy()
+            tmp['age_years'] = sale_year - tmp['year_made']
+            df = tmp
+        else:
+            return None
+    if 'price' not in df.columns:
+        return None
     data = df.dropna(subset=["age_years", "price"]).copy()
     data["log_price"] = np.log1p(data["price"])
     
@@ -260,6 +293,7 @@ def product_group_fig(df: pd.DataFrame) -> plt.Figure:
     - Shows price distributions
     """
     set_viz_theme()
+    df = _ensure_price_column(df)
     
     if "product_group" not in df.columns:
         return None

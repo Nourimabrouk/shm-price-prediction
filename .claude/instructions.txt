@@ -1,0 +1,146 @@
+# SHM Heavy Equipment Price Prediction - Tech Case
+
+## Business Context
+**Company**: SHM (secondhand machinery dealer)
+**Problem**: Replace retiring expert's pricing knowledge with ML prediction
+**Dataset**: Historical auction data with equipment features and prices
+**Timeline**: 4-hour assessment (2-3h analysis, 1-2h modeling, 1h reporting)
+
+## Assignment Requirements
+
+### Core Tasks
+1. **Dataset Analysis**: Identify 5 key findings that warrant special attention
+2. **Feature Analysis**: Analyze features and target variable
+3. **Preprocessing Strategy**: Define data preparation steps
+4. **Model Selection**: Choose and justify model approach
+5. **Evaluation Framework**: Define evaluation methodology
+6. **Time Allocation**: Provide realistic time estimates
+
+### Deliverables
+- **Code**: Python notebook with complete analysis
+- **Report**: Structured approach documentation
+- **Business Focus**: Explain why approach suits this use case
+
+## AI Agent Best Practices for This Case
+
+### Meta-Optimal Agent Strategy
+
+#### 1. Data Analysis Agent
+- **Focus**: Comprehensive EDA identifying business-critical insights
+- **Key Tasks**: Missing data analysis, temporal patterns, price distributions
+- **Success Metric**: Clear identification of 5 standout findings
+- **Time Budget**: 2 hours maximum
+
+#### 2. Modeling Agent
+- **Focus**: Robust model selection with business justification
+- **Key Models**: Baseline (Random Forest) + Advanced (CatBoost)
+- **Success Metric**: Achieve >80% accuracy within 15% price tolerance
+- **Time Budget**: 1-1.5 hours maximum
+
+#### 3. Migration Agent
+- **Focus**: Transform prototype to professional deliverable
+- **Key Tasks**: Clean code structure, comprehensive notebook, documentation
+- **Success Metric**: Production-ready repository with single main notebook
+- **Time Budget**: Continuous integration throughout process
+
+### Advanced Prompting Strategies
+
+#### Context Priming
+```
+You are a senior ML engineer at Bit consulting for SHM. The client needs 
+a data-driven pricing system to replace their retiring expert. Focus on 
+business value and practical implementation over academic perfection.
+```
+
+#### Constraint Awareness
+- **Time Constraint**: 4-hour assessment, not 3-week project
+- **Business Constraint**: Must be interpretable and trustworthy
+- **Data Constraint**: 412K records, high cardinality categoricals
+- **Technical Constraint**: Handle 82% missing usage data
+
+#### Success Criteria
+- Demonstrate ML competency appropriate for consulting role
+- Show business acumen with practical recommendations
+- Deliver professional presentation ready for client review
+- Balance technical depth with time constraints
+
+### Agent Coordination Protocol
+
+#### Sequential Execution
+1. **Data Agent** → Comprehensive EDA and finding identification
+2. **Modeling Agent** → Model development and evaluation
+3. **Migration Agent** → Professional packaging and presentation
+
+#### Quality Gates
+- Each agent validates previous work before proceeding
+- Business value maintained throughout pipeline
+- Time budget monitored and adjusted dynamically
+- Professional presentation standards enforced
+
+### Technical Implementation Notes
+
+#### Core Files Structure
+```
+src/
+├── data_loader.py    # Robust data loading and validation
+├── eda.py           # Exploratory analysis and insights
+├── models.py        # Baseline and advanced modeling
+├── evaluation.py    # Business metrics and validation
+└── plots.py         # Professional visualizations
+
+notebooks/
+└── shm_analysis.ipynb  # Main deliverable
+
+docs/
+├── findings.md      # Key business insights
+└── approach.md      # Technical methodology
+```
+
+#### Migration Priority Framework
+- **Tier 1 (Essential)**: Core EDA, baseline modeling, evaluation
+- **Tier 2 (Competitive)**: CatBoost advanced modeling, professional viz
+- **Tier 3 (Impressive)**: Feature engineering, ensemble methods
+- **Skip**: Over-engineered components not suitable for 4-hour assessment
+
+### Quality Assurance
+
+#### Code Quality Standards
+- PEP 8 compliance and professional formatting
+- Comprehensive docstrings and business context
+- Error handling and graceful degradation
+- Modular design with clear separation of concerns
+
+#### Business Value Validation
+- All analysis tied to business impact
+- Recommendations actionable for SHM stakeholders  
+- Risk mitigation strategies included
+- Implementation roadmap provided
+
+#### Presentation Standards
+- Single comprehensive Jupyter notebook as main deliverable
+- Professional visualizations with clear insights
+- Executive summary with key findings
+- Technical approach suitable for both business and technical audiences
+
+---
+
+## Original Assignment Details
+
+### Tasks Summary
+- Analyze dataset and identify 5 critical findings
+- Define preprocessing approach
+- Select and justify model choice
+- Design evaluation methodology
+- Provide time allocation estimates
+
+### Success Metrics
+- Professional code quality appropriate for consulting engagement
+- Clear business insights driving implementation recommendations
+- Technical approach balancing sophistication with time constraints
+- Deliverable ready for immediate client presentation
+
+### Time Guidelines
+- **Data Analysis**: 2-3 hours (comprehensive EDA)
+- **Modeling**: 1-2 hours (baseline + advanced)
+- **Reporting**: 1 hour (notebook + documentation)
+- **Total**: 4-6 hours realistic consulting timeframe

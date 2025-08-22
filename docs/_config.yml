@@ -1,0 +1,28 @@
+title: "SHM Heavy Equipment Price Prediction"
+description: "ML solution for heavy equipment valuation using rigorous temporal validation"
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+# GitHub Pages specific settings
+repository: nourimabrouk/shm-price-prediction
+
+# Analytics and SEO
+lang: en-US
+
+# Navigation
+header_pages:
+  - index.html
+  - FINAL_TECHNICAL_CASE_REPORT.md
+  - EXECUTIVE_SUMMARY.md
+
+# Footer
+author:
+  name: Nouri Mabrouk
+  email: ""

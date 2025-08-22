@@ -1,0 +1,364 @@
+{
+  "timestamp": "20250822_053307",
+  "sample_size": 50000,
+  "best_model": "CatBoost",
+  "best_val_r2": 0.6979021204516298,
+  "model_results": {
+    "LinearRegression": {
+      "training_time": 0.10627913475036621,
+      "val_metrics": {
+        "model_name": "LinearRegression_Val",
+        "timestamp": "20250822_053243",
+        "basic_metrics": {
+          "mae": 13252.39927021849,
+          "rmse": 21106.334192563365,
+          "r2": 0.25346010587439105,
+          "samples": 61905,
+          "mape": 48.778267967625325,
+          "rmsle": 0.5353319904791587
+        },
+        "business_metrics": {
+          "within_5_pct": 8.63096680397383,
+          "within_10_pct": 16.916242629836038,
+          "within_15_pct": 24.894596559244004,
+          "within_25_pct": 40.36992165414748,
+          "within_50_pct": 70.42888296583475,
+          "median_abs_pct_error": 31.7819050202999,
+          "q90_abs_pct_error": 104.28032719237605,
+          "max_abs_pct_error": 11218.12631883588
+        },
+        "confidence_intervals": {
+          "confidence_level": 0.95,
+          "mae_ci": [
+            13127.510502109679,
+            13383.062365899497
+          ],
+          "rmse_ci": [
+            20132.565437014822,
+            22244.02246028146
+          ],
+          "r2_ci": [
+            0.17013944187626043,
+            0.3195778816947207
+          ]
+        },
+        "residual_analysis": {
+          "residual_mean": 1341.5766879316702,
+          "residual_std": 21063.653886222295,
+          "residual_skewness": 0.04783635374672319,
+          "residual_kurtosis": 155.3016783113506,
+          "residual_q25": -9646.466248793426,
+          "residual_median": -524.7671651541241,
+          "residual_q75": 8907.581274775395,
+          "residual_iqr": 18554.04752356882,
+          "normality_test": "anderson-darling",
+          "normality_statistic": 1575.4759862721403,
+          "normality_critical_values": [
+            0.576,
+            0.656,
+            0.787,
+            0.918,
+            1.092
+          ]
+        }
+      },
+      "test_metrics": {
+        "model_name": "LinearRegression_Test",
+        "timestamp": "20250822_053245",
+        "basic_metrics": {
+          "mae": 18056.168545162604,
+          "rmse": 23222.964180726747,
+          "r2": 0.12226198138822453,
+          "samples": 61905,
+          "mape": 92.18047042601717,
+          "rmsle": 0.7424593535799507
+        },
+        "business_metrics": {
+          "within_5_pct": 5.626362975527018,
+          "within_10_pct": 11.112188030046038,
+          "within_15_pct": 16.49624424521444,
+          "within_25_pct": 26.784589290041193,
+          "within_50_pct": 47.83943138680235,
+          "median_abs_pct_error": 53.33600075916102,
+          "q90_abs_pct_error": 223.29785448057692,
+          "max_abs_pct_error": 7279.739016069069
+        },
+        "confidence_intervals": {
+          "confidence_level": 0.95,
+          "mae_ci": [
+            17949.72269320366,
+            18164.35046411182
+          ],
+          "rmse_ci": [
+            23037.15881471138,
+            23448.426028526424
+          ],
+          "r2_ci": [
+            0.10510198612600297,
+            0.139507529364132
+          ]
+        },
+        "residual_analysis": {
+          "residual_mean": -9552.277616685491,
+          "residual_std": 21167.42917014456,
+          "residual_skewness": 0.7797961772044159,
+          "residual_kurtosis": 6.3319056360543176,
+          "residual_q25": -22662.84830932487,
+          "residual_median": -10164.617906934742,
+          "residual_q75": 1573.062581849652,
+          "residual_iqr": 24235.91089117452,
+          "normality_test": "anderson-darling",
+          "normality_statistic": 280.71276242569,
+          "normality_critical_values": [
+            0.576,
+            0.656,
+            0.787,
+            0.918,
+            1.092
+          ]
+        }
+      }
+    },
+    "RandomForest": {
+      "training_time": 5.656672954559326,
+      "val_metrics": {
+        "model_name": "RandomForest_Val",
+        "timestamp": "20250822_053253",
+        "basic_metrics": {
+          "mae": 9028.972539200337,
+          "rmse": 13939.037701319503,
+          "r2": 0.6743935603227438,
+          "samples": 61905,
+          "mape": 28.081980939433226,
+          "rmsle": 0.3492945086182615
+        },
+        "business_metrics": {
+          "within_5_pct": 13.352717874162023,
+          "within_10_pct": 26.65374363944754,
+          "within_15_pct": 38.95485017365318,
+          "within_25_pct": 59.408771504724974,
+          "within_50_pct": 85.88320814150715,
+          "median_abs_pct_error": 20.091622698566162,
+          "q90_abs_pct_error": 59.07725923868612,
+          "max_abs_pct_error": 516.4880627499634
+        },
+        "confidence_intervals": {
+          "confidence_level": 0.95,
+          "mae_ci": [
+            8948.051079452185,
+            9114.324837092274
+          ],
+          "rmse_ci": [
+            13787.122221478698,
+            14092.21440794808
+          ],
+          "r2_ci": [
+            0.6687826182587822,
+            0.6799800081105528
+          ]
+        },
+        "residual_analysis": {
+          "residual_mean": 2325.3172798350774,
+          "residual_std": 13743.71389351899,
+          "residual_skewness": 1.6370165471960416,
+          "residual_kurtosis": 5.1089793577950715,
+          "residual_q25": -5059.247601442323,
+          "residual_median": -181.99214434963142,
+          "residual_q75": 6133.846177589176,
+          "residual_iqr": 11193.093779031498,
+          "normality_test": "anderson-darling",
+          "normality_statistic": 2190.8180397937103,
+          "normality_critical_values": [
+            0.576,
+            0.656,
+            0.787,
+            0.918,
+            1.092
+          ]
+        }
+      },
+      "test_metrics": {
+        "model_name": "RandomForest_Test",
+        "timestamp": "20250822_053255",
+        "basic_metrics": {
+          "mae": 8731.94438291129,
+          "rmse": 13872.976881896704,
+          "r2": 0.6867659755085138,
+          "samples": 61905,
+          "mape": 29.527964832044624,
+          "rmsle": 0.362451560455996
+        },
+        "business_metrics": {
+          "within_5_pct": 12.265568209353042,
+          "within_10_pct": 24.590905419594538,
+          "within_15_pct": 36.223245295210404,
+          "within_25_pct": 56.795089249656726,
+          "within_50_pct": 85.2984411598417,
+          "median_abs_pct_error": 21.47339037276256,
+          "q90_abs_pct_error": 60.01525974489173,
+          "max_abs_pct_error": 781.8694010380071
+        },
+        "confidence_intervals": {
+          "confidence_level": 0.95,
+          "mae_ci": [
+            8650.673942451724,
+            8816.184782670847
+          ],
+          "rmse_ci": [
+            13719.721123633086,
+            14021.24626064743
+          ],
+          "r2_ci": [
+            0.6818643250335026,
+            0.6920177587036436
+          ]
+        },
+        "residual_analysis": {
+          "residual_mean": 2568.4823209310453,
+          "residual_std": 13633.135594304966,
+          "residual_skewness": 1.6112408130911253,
+          "residual_kurtosis": 5.691477193700418,
+          "residual_q25": -4112.13305480161,
+          "residual_median": 217.4008029325123,
+          "residual_q75": 6074.529720358234,
+          "residual_iqr": 10186.662775159844,
+          "normality_test": "anderson-darling",
+          "normality_statistic": 2420.288098351317,
+          "normality_critical_values": [
+            0.576,
+            0.656,
+            0.787,
+            0.918,
+            1.092
+          ]
+        }
+      }
+    },
+    "CatBoost": {
+      "training_time": 6.081261157989502,
+      "val_metrics": {
+        "model_name": "CatBoost_Val",
+        "timestamp": "20250822_053303",
+        "basic_metrics": {
+          "mae": 8726.618745331223,
+          "rmse": 13426.417215710058,
+          "r2": 0.6979021204516298,
+          "samples": 61905,
+          "mape": 24.944229008003095,
+          "rmsle": 0.33295255043187155
+        },
+        "business_metrics": {
+          "within_5_pct": 12.948873273564331,
+          "within_10_pct": 25.83797754624021,
+          "within_15_pct": 38.04539213310718,
+          "within_25_pct": 60.61384379290848,
+          "within_50_pct": 90.58234391406187,
+          "median_abs_pct_error": 20.08926590855928,
+          "q90_abs_pct_error": 49.03312107099795,
+          "max_abs_pct_error": 462.7968238851573
+        },
+        "confidence_intervals": {
+          "confidence_level": 0.95,
+          "mae_ci": [
+            8642.60760936663,
+            8806.284604380819
+          ],
+          "rmse_ci": [
+            13285.647436809895,
+            13570.638582765407
+          ],
+          "r2_ci": [
+            0.6937414207016097,
+            0.7024458610755219
+          ]
+        },
+        "residual_analysis": {
+          "residual_mean": 4950.8137658307505,
+          "residual_std": 12480.309383439826,
+          "residual_skewness": 1.5641558087588339,
+          "residual_kurtosis": 4.556976654810987,
+          "residual_q25": -2194.9300007708007,
+          "residual_median": 2418.8537855793365,
+          "residual_q75": 8997.30916317452,
+          "residual_iqr": 11192.23916394532,
+          "normality_test": "anderson-darling",
+          "normality_statistic": 1989.7516355733533,
+          "normality_critical_values": [
+            0.576,
+            0.656,
+            0.787,
+            0.918,
+            1.092
+          ]
+        }
+      },
+      "test_metrics": {
+        "model_name": "CatBoost_Test",
+        "timestamp": "20250822_053305",
+        "basic_metrics": {
+          "mae": 8297.02475321873,
+          "rmse": 13125.34200048696,
+          "r2": 0.7196175268783108,
+          "samples": 61905,
+          "mape": 26.690234676510066,
+          "rmsle": 0.3395565012153827
+        },
+        "business_metrics": {
+          "within_5_pct": 12.591874646635976,
+          "within_10_pct": 24.965673208949195,
+          "within_15_pct": 36.775704708828044,
+          "within_25_pct": 58.153622486067356,
+          "within_50_pct": 88.82319683385833,
+          "median_abs_pct_error": 20.957145238067447,
+          "q90_abs_pct_error": 52.3497240093124,
+          "max_abs_pct_error": 583.3426018944557
+        },
+        "confidence_intervals": {
+          "confidence_level": 0.95,
+          "mae_ci": [
+            8221.24957188177,
+            8375.780965189722
+          ],
+          "rmse_ci": [
+            12979.38632755349,
+            13263.444161215406
+          ],
+          "r2_ci": [
+            0.715192774143032,
+            0.7236218467251333
+          ]
+        },
+        "residual_analysis": {
+          "residual_mean": 3979.9196750305646,
+          "residual_std": 12507.391495034113,
+          "residual_skewness": 1.6552062230716031,
+          "residual_kurtosis": 5.359250472032526,
+          "residual_q25": -2796.737802349253,
+          "residual_median": 1114.5055230086327,
+          "residual_q75": 7700.32577598279,
+          "residual_iqr": 10497.063578332043,
+          "normality_test": "anderson-darling",
+          "normality_statistic": 2396.328144353516,
+          "normality_critical_values": [
+            0.576,
+            0.656,
+            0.787,
+            0.918,
+            1.092
+          ]
+        }
+      }
+    }
+  },
+  "feature_count": 50,
+  "training_summary": {
+    "total_models": 3,
+    "best_model": "CatBoost",
+    "best_val_r2": 0.6979021204516298,
+    "all_val_r2": {
+      "LinearRegression": 0.25346010587439105,
+      "RandomForest": 0.6743935603227438,
+      "CatBoost": 0.6979021204516298
+    }
+  }
+}

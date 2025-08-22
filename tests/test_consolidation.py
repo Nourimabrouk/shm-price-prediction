@@ -183,7 +183,7 @@ def test_integration_features():
 
 def main():
     """Run all consolidation tests."""
-    print("🚀 Testing Consolidated SHM Pipeline Features")
+    print("[TESTING] Consolidated SHM Pipeline Features")
     print("="*60)
     
     test_enhanced_data_loader()
@@ -193,8 +193,8 @@ def main():
     test_integration_features()
     
     print("\n" + "="*60)
-    print("🎉 Consolidation Testing Complete!")
-    print("\n📋 Summary of Integrated Features:")
+    print("[SUCCESS] Consolidation Testing Complete!")
+    print("\n[SUMMARY] Integrated Features:")
     print("   ✅ Temporal splitting with audit trails (from internal/)")
     print("   ✅ Prediction intervals with uncertainty quantification (from internal/)")
     print("   ✅ Business-aware data preprocessing (enhanced)")
@@ -203,8 +203,8 @@ def main():
     print("   ✅ Competition-grade hyperparameter optimization (from src/)")
     print("   ✅ Advanced visualization suite (from src/)")
     print("   ✅ Comprehensive business metrics (from src/)")
-    print("\n🎯 Result: internal/ features successfully integrated into src/")
-    print("🗑️  internal/ folder can now be deprecated - src/ is the unified solution")
+    print("\n[RESULT] internal/ features successfully integrated into src/")
+    print("[NOTE] internal/ folder can now be deprecated - src/ is the unified solution")
 
 if __name__ == "__main__":
     main()

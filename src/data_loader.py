@@ -22,7 +22,7 @@ except ImportError:
 warnings.filterwarnings('ignore')
 
 class SHMDataLoader:
-    """Load and validate heavy equipment auction data."""
+    """Load and validate heavy equipment auction data with schema contracts."""
     
     def __init__(self, data_path: Path):
         """Initialize data loader with path to SHM dataset.
@@ -31,6 +31,16 @@ class SHMDataLoader:
             data_path: Path to the SHM heavy equipment dataset CSV file
         """
         self.data_path = Path(data_path)
+        
+        # Schema contract definitions for data validation
+        self.REQUIRED_SCHEMA = {
+            'target_column': {'required': True, 'dtype': 'numeric', 'min_value': 1000},
+            'date_column': {'required': True, 'dtype': 'datetime', 'format': 'flexible'},
+            'year_column': {'required': True, 'dtype': 'numeric', 'min_value': 1950, 'max_value': 2030},
+            'id_column': {'required': True, 'dtype': 'any', 'unique': True},
+            'minimum_rows': 1000,
+            'maximum_missing_rate': 0.95  # No column should be >95% missing
+        }
         
         # Enhanced column detection candidates from internal/preprocessing.py
         self.DATE_CANDIDATES = [
@@ -206,12 +216,73 @@ class SHMDataLoader:
         except:
             return np.nan
     
+    def validate_schema_contracts(self, df: pd.DataFrame) -> Tuple[bool, List[str]]:
+        """Validate dataset against schema contracts for production readiness.
+        
+        Args:
+            df: DataFrame to validate
+            
+        Returns:
+            Tuple of (is_valid, list_of_violations)
+        """
+        violations = []
+        
+        # Check minimum row count
+        if len(df) < self.REQUIRED_SCHEMA['minimum_rows']:
+            violations.append(f"Dataset has {len(df)} rows, minimum required: {self.REQUIRED_SCHEMA['minimum_rows']}")
+        
+        # Check for required columns
+        target_col = self.find_column_robust(self.TARGET_CANDIDATES, df)
+        if not target_col:
+            violations.append("Required target column not found")
+        else:
+            # Validate target column
+            if not pd.api.types.is_numeric_dtype(df[target_col]):
+                violations.append(f"Target column '{target_col}' must be numeric")
+            elif df[target_col].min() < self.REQUIRED_SCHEMA['target_column']['min_value']:
+                violations.append(f"Target column has values below minimum threshold ({self.REQUIRED_SCHEMA['target_column']['min_value']})")
+        
+        # Check for date column
+        date_col = self.find_column_robust(self.DATE_CANDIDATES, df)
+        if not date_col:
+            violations.append("Required date column not found")
+        
+        # Check for year column
+        year_col = self.find_column_robust(self.YEAR_CANDIDATES, df)
+        if not year_col:
+            violations.append("Required year column not found")
+        else:
+            # Validate year ranges
+            if pd.api.types.is_numeric_dtype(df[year_col]):
+                min_year = df[year_col].min()
+                max_year = df[year_col].max()
+                if min_year < self.REQUIRED_SCHEMA['year_column']['min_value']:
+                    violations.append(f"Year column has invalid minimum value: {min_year}")
+                if max_year > self.REQUIRED_SCHEMA['year_column']['max_value']:
+                    violations.append(f"Year column has invalid maximum value: {max_year}")
+        
+        # Check for ID column
+        id_col = self.find_column_robust(self.ID_CANDIDATES, df)
+        if not id_col:
+            violations.append("Required ID column not found")
+        elif not df[id_col].is_unique:
+            violations.append(f"ID column '{id_col}' contains duplicate values")
+        
+        # Check maximum missing rate
+        missing_rates = df.isnull().mean()
+        excessive_missing = missing_rates[missing_rates > self.REQUIRED_SCHEMA['maximum_missing_rate']]
+        if len(excessive_missing) > 0:
+            violations.append(f"Columns with excessive missing data (>{self.REQUIRED_SCHEMA['maximum_missing_rate']*100}%): {list(excessive_missing.index)}")
+        
+        return len(violations) == 0, violations
+
     def engineer_features(self, df: pd.DataFrame) -> pd.DataFrame:
         """Engineer comprehensive features combining basic and advanced econometric techniques.
         
         This method implements a two-stage feature engineering pipeline:
-        1. Basic feature engineering: Age, usage, temporal, and dimensional features
-        2. Advanced econometric features: Non-linear depreciation, seasonality, interactions, etc.
+        1. Schema validation: Ensure data contracts are met
+        2. Basic feature engineering: Age, usage, temporal, and dimensional features
+        3. Advanced econometric features: Non-linear depreciation, seasonality, interactions, etc.
         
         Args:
             df: DataFrame with basic columns
@@ -219,35 +290,64 @@ class SHMDataLoader:
         Returns:
             DataFrame with comprehensive engineered features
         """
+        print("[TOOL] Stage 0: Schema Contract Validation...")
+        is_valid, violations = self.validate_schema_contracts(df)
+        if not is_valid:
+            print(f"[WARNING] Schema violations detected:")
+            for violation in violations:
+                print(f"  - {violation}")
+            print("[WARNING] Proceeding with feature engineering but production deployment may be affected")
+        else:
+            print("[OK] Schema contracts validated successfully")
+        
         print("[TOOL] Stage 1: Basic Feature Engineering...")
         
         # ==================== BASIC FEATURE ENGINEERING ====================
         
-        # Date feature engineering
+        # Date feature engineering (ensure proper parsing for temporal splits)
         date_col = self.find_date_column(df)
         if date_col and date_col in df.columns:
+            # Rename to standard 'sales_date' for models.py compatibility  
+            if date_col != 'sales_date':
+                df = df.rename(columns={date_col: 'sales_date'})
+                date_col = 'sales_date'
+                
+            # Parse dates with multiple format attempts
             df[date_col] = pd.to_datetime(df[date_col], errors='coerce', infer_datetime_format=True)
+            
+            # Validate date parsing
+            invalid_dates = df[date_col].isna().sum()
+            if invalid_dates > 0:
+                print(f"[WARN] {invalid_dates} invalid dates found and set to NaN")
+            
+            # Add basic temporal features (models.py will add more)
             df['sale_year'] = df[date_col].dt.year
             df['sale_month'] = df[date_col].dt.month
             df['sale_quarter'] = df[date_col].dt.quarter
             df['sale_dow'] = df[date_col].dt.dayofweek
+            
+            print(f"[DATE] Parsed {date_col}: {df[date_col].min()} to {df[date_col].max()}")
         
         # Year sanity check - set implausible YearMade to NaN
         if 'year_made' in df.columns:
-            df.loc[df['year_made'] < 1930, 'year_made'] = np.nan
+            invalid_years = (df['year_made'] < 1930) | (df['year_made'] > 2025)
+            df.loc[invalid_years, 'year_made'] = np.nan
+            print(f"[CLEAN] Set {invalid_years.sum()} invalid YearMade values to NaN")
         
-        # Age calculation
-        if 'year_made' in df.columns and 'sale_year' in df.columns:
-            df['age_years'] = df['sale_year'] - df['year_made']
-            df.loc[df['age_years'] < 0, 'age_years'] = np.nan
+        # Skip age calculation - use raw YearMade (Blue Book lesson)
+        # Age calculation removed to follow Blue Book best practices
+        # Models will use raw year_made directly for better performance
         
-        # Usage features
+        # Machine hours handling (detect zeros as likely missing)
         if 'machinehours_currentmeter' in df.columns:
-            df['log1p_hours'] = np.log1p(df['machinehours_currentmeter'])
+            zero_hours = (df['machinehours_currentmeter'] == 0)
+            if zero_hours.sum() > 0:
+                print(f"[DATA] Found {zero_hours.sum()} zero machine hours (likely missing data)")
+            # Note: models.py will handle the actual conversion to NaN
+            df['log1p_hours'] = np.log1p(df['machinehours_currentmeter'].fillna(0))
         
-        # Hours per year (usage intensity)
-        if 'age_years' in df.columns and 'machinehours_currentmeter' in df.columns:
-            df['hours_per_year'] = df['machinehours_currentmeter'] / df['age_years'].clip(lower=0.5)
+        # Skip hours per year calculation since we're not calculating age
+        # This derived feature removed per Blue Book recommendations
         
         # Unit parsing for dimensional features
         dimensional_cols = ['machine_width', 'stick_length', 'blade_width', 'screen_size', 'screen_size_1']
@@ -275,9 +375,19 @@ class SHMDataLoader:
         print("[BRAIN] Stage 2: Advanced Econometric Features...")
         
         try:
-            # Import the sophisticated feature engineering
-            from internal.feature_engineering import add_econometric_features, get_feature_engineering_summary
-            
+            # Import the sophisticated feature engineering (prefer archived_prototype path)
+            try:
+                from archived_prototype.feature_engineering import (
+                    add_econometric_features,
+                    get_feature_engineering_summary,
+                )
+            except ImportError:
+                # Legacy/internal path fallback if available
+                from internal.feature_engineering import (
+                    add_econometric_features,
+                    get_feature_engineering_summary,
+                )
+
             # Apply econometric feature engineering
             df_enhanced, new_features = add_econometric_features(
                 df, 

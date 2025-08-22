@@ -263,15 +263,15 @@ def analyze_data_flow():
         
         # Check internal modules
         try:
-            from internal_prototype import feature_engineering
-            print(f"✅ Internal feature engineering available")
+            from archived_prototype import feature_engineering
+            print(f"[AVAILABLE] Internal feature engineering available")
         except ImportError:
-            print(f"⚠️  Internal feature engineering not available (optional)")
+            print(f"[OPTIONAL] Internal feature engineering not available (optional)")
         
         return True
         
     except Exception as e:
-        print(f"❌ Data flow analysis failed: {e}")
+        print(f"[ERROR] Data flow analysis failed: {e}")
         traceback.print_exc()
         return False
 
@@ -293,31 +293,31 @@ def main():
     results = {}
     
     for test_name, test_func in tests:
-        print(f"\n🔍 Running: {test_name}")
+        print(f"\n[TESTING] Running: {test_name}")
         try:
             results[test_name] = test_func()
         except Exception as e:
-            print(f"❌ {test_name} failed with exception: {e}")
+            print(f"[ERROR] {test_name} failed with exception: {e}")
             results[test_name] = False
     
     # Summary
     print("\n" + "="*80)
-    print("📊 PIPELINE ANALYSIS SUMMARY")
+    print("[SUMMARY] PIPELINE ANALYSIS SUMMARY")
     print("="*80)
     
     passed = sum(results.values())
     total = len(results)
     
     for test_name, passed_test in results.items():
-        status = "✅ PASS" if passed_test else "❌ FAIL"
+        status = "[PASS]" if passed_test else "[FAIL]"
         print(f"{status}: {test_name}")
     
     print(f"\nOverall Results: {passed}/{total} tests passed ({passed/total*100:.1f}%)")
     
     if passed == total:
-        print("🎉 ALL TESTS PASSED - Pipeline is functioning correctly!")
+        print("[SUCCESS] ALL TESTS PASSED - Pipeline is functioning correctly!")
     else:
-        print("⚠️  Some tests failed - see details above for issues to address")
+        print("[WARNING] Some tests failed - see details above for issues to address")
     
     return passed == total
 

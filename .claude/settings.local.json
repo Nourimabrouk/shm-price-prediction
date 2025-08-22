@@ -37,10 +37,40 @@
       "Bash(git commit:*)",
       "Bash(git lfs:*)",
       "Bash(git reset:*)",
-      "Bash(git filter-branch:*)"
+      "Bash(git filter-branch:*)",
+      "Bash(py -3 -m venv .venv)",
+      "Bash(..venvScriptsActivate.ps1)",
+      "Bash(tar:*)",
+      "Bash(\".venv\\Scripts\\activate\")",
+      "Bash(del test_model_training.py test_notebook_execution.py)",
+      "WebFetch(domain:docs.anthropic.com)",
+      "Bash(set PYTHONPATH=.)",
+      "Bash(dir C:UsersNouriDocumentsGitHubshm-price-prediction*.py)",
+      "Bash(del \"C:\\Users\\Nouri\\Documents\\GitHub\\shm-price-prediction\\test_temporal_validation_fix.py\")",
+      "Bash(del \"C:\\Users\\Nouri\\Documents\\GitHub\\shm-price-prediction\\generate_findings.py\")",
+      "Bash(del \"C:\\Users\\Nouri\\Documents\\GitHub\\shm-price-prediction\\investigate_data_leakage.py\")",
+      "Bash(dir:*)",
+      "Bash(jupyter --version)",
+      "Bash(move:*)",
+      "Bash(jupyter:*)",
+      "Bash(copy:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(git config:*)",
+      "Bash(del \"C:\\Users\\Nouri\\Documents\\GitHub\\shm-price-prediction\\CRITICAL_ISSUES_FIXED.md\")",
+      "Bash(git restore:*)",
+      "Bash(del:*)",
+      "Bash(git log:*)",
+      "Bash(git rm:*)",
+      "Bash(powershell:*)",
+      "mcp__ide__executeCode",
+      "Bash(echo:*)"
     ],
     "deny": [],
     "ask": [],
-    "defaultMode": "acceptEdits"
+    "defaultMode": "acceptEdits",
+    "additionalDirectories": [
+      "C:\\c\\Users\\Nouri\\Documents\\GitHub\\shm-price-prediction",
+      "C:\\c\\Users\\Nouri\\Documents\\GitHub\\shm-price-prediction\\outputs"
+    ]
   }
 }

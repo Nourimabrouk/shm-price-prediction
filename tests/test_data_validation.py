@@ -10,7 +10,7 @@ import os
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.validation import DataValidator, validate_model_inputs
+from src.temporal_validation import TemporalSplitter, TemporalSplitConfig
 from src.data_loader import SHMDataLoader
 
 

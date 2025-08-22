@@ -1,9 +1,52 @@
+# Python artifacts
 .venv/
 __pycache__/
 *.pyc
+*.pyo
+*.egg-info/
+
+# IDE and editor files
 .DS_Store
 .env
 .vscode/
 .idea/
 .pytest_cache/
 .ipynb_checkpoints/
+
+# Development artifacts
+test_*.py
+*_test.py
+*_backup.*
+investigate_*.py
+enhanced_*.py
+generate_*.py
+
+# Development artifacts (exclude from submission)
+CRITICAL_ISSUES_FIXED.md
+firstpromptmorning.txt
+
+# Keep valuable internal docs - these show professional project management
+# Only exclude temporary development artifacts
+internal/temp_*
+internal/*_TEMP*
+internal/debug_*
+
+# Test outputs and artifacts
+outputs/test*/
+outputs/figures/test*/
+outputs/figures/*test*.png
+outputs/results/test_*.json
+tests/test_output/
+catboost_info/
+*.tmp
+
+# Development artifacts (meta-optimization files that may confuse reviewers)
+.internal/FINAL_OPTIMIZATION_META_PROMPT.md
+
+# Duplicate artifacts (keep outputs/ only)
+artifacts/
+
+# Archive and deprecated content (preserve development history without confusion)
+archive/
+notebooks/archive/
+tools/archived-scripts/

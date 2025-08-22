@@ -38,27 +38,27 @@ def create_sample_data():
     missing_indices = np.random.choice(df.index, size=int(0.1 * len(df)), replace=False)
     df.loc[missing_indices, 'machinehours_currentmeter'] = np.nan
     
-    print(f"✅ Sample data created: {len(df):,} records")
+    print(f"Sample data created: {len(df):,} records")
     return df
 
 def test_enhanced_visualization_suite():
     """Test the enhanced visualization suite."""
-    print("🎨 Testing Enhanced Visualization Suite...")
+    print("Testing Enhanced Visualization Suite...")
     
     try:
         from viz_enhanced import EnhancedVisualizationSuite, PLOTLY_AVAILABLE
-        print(f"✅ Enhanced visualization module imported successfully")
-        print(f"📊 Plotly support: {'Available' if PLOTLY_AVAILABLE else 'Not available'}")
+        print("Enhanced visualization module imported successfully")
+        print(f"Plotly support: {'Available' if PLOTLY_AVAILABLE else 'Not available'}")
         
         # Create sample data
         df = create_sample_data()
         
         # Initialize enhanced viz suite
         viz_enhanced = EnhancedVisualizationSuite(output_dir="./outputs/test_figures/")
-        print(f"✅ Enhanced visualization suite initialized")
+        print(f"SUCCESS Enhanced visualization suite initialized")
         
         # Test static visualizations from existing suite
-        print("\n📊 Testing integration with existing viz_suite...")
+        print("\n Testing integration with existing viz_suite...")
         try:
             from viz_suite import price_distribution_fig, age_vs_price_fig, product_group_fig
             
@@ -77,16 +77,16 @@ def test_enhanced_visualization_suite():
                         import matplotlib.pyplot as plt
                         plt.close(fig)
                     else:
-                        print(f"  ⚠️ {name}: No figure returned")
+                        print(f"  WARNING {name}: No figure returned")
                 except Exception as e:
-                    print(f"  ❌ {name}: Failed - {e}")
+                    print(f"  ERROR {name}: Failed - {e}")
             
         except ImportError as e:
-            print(f"  ⚠️ viz_suite import failed: {e}")
+            print(f"  WARNING viz_suite import failed: {e}")
         
         # Test interactive visualizations
         if PLOTLY_AVAILABLE:
-            print("\n🚀 Testing interactive visualizations...")
+            print("\n Testing interactive visualizations...")
             
             interactive_tests = [
                 ('executive_dashboard', viz_enhanced.create_executive_dashboard),
@@ -103,11 +103,11 @@ def test_enhanced_visualization_suite():
                         print(f"  SUCCESS {name}: Generated successfully")
                         fig.write_html(f"./outputs/test_figures/test_{name}.html")
                     else:
-                        print(f"  ⚠️ {name}: No figure returned")
+                        print(f"  WARNING {name}: No figure returned")
                 except Exception as e:
-                    print(f"  ❌ {name}: Failed - {e}")
+                    print(f"  ERROR {name}: Failed - {e}")
         else:
-            print("\n⚠️ Plotly not available - skipping interactive tests")
+            print("\nWARNING Plotly not available - skipping interactive tests")
             print("   Install with: pip install plotly")
         
         # Test complete suite generation
@@ -121,38 +121,38 @@ def test_enhanced_visualization_suite():
             
             saved_figures = viz_enhanced.save_enhanced_figures(df, model_metrics)
             
-            print(f"✅ Complete suite generated: {len(saved_figures)} files")
+            print(f"SUCCESS Complete suite generated: {len(saved_figures)} files")
             for name, path in saved_figures.items():
                 file_type = "Static" if path.endswith('.png') else "Interactive"
-                print(f"  📁 {file_type}: {name}")
+                print(f"  {file_type}: {name}")
             
         except Exception as e:
-            print(f"❌ Complete suite generation failed: {e}")
+            print(f"ERROR Complete suite generation failed: {e}")
         
         print("\n" + "="*60)
         print("ENHANCED VISUALIZATION SUITE TEST RESULTS")
         print("="*60)
-        print("✅ Module import: SUCCESS")
-        print("✅ Sample data generation: SUCCESS")  
-        print("✅ Enhanced suite initialization: SUCCESS")
+        print("SUCCESS Module import: SUCCESS")
+        print("SUCCESS Sample data generation: SUCCESS")  
+        print("SUCCESS Enhanced suite initialization: SUCCESS")
         
         if PLOTLY_AVAILABLE:
-            print("✅ Interactive visualizations: AVAILABLE")
+            print("SUCCESS Interactive visualizations: AVAILABLE")
         else:
-            print("⚠️ Interactive visualizations: REQUIRES PLOTLY")
+            print("WARNING Interactive visualizations: REQUIRES PLOTLY")
         
-        print(f"📁 Test outputs saved to: ./outputs/test_figures/")
-        print("🎯 Ready for notebook integration")
+        print(f"[OUTPUT] Test outputs saved to: ./outputs/test_figures/")
+        print("[READY] Ready for notebook integration")
         
         return True
         
     except ImportError as e:
-        print(f"❌ Import failed: {e}")
-        print("💡 Make sure viz_enhanced.py is in the src/ directory")
+        print(f"ERROR Import failed: {e}")
+        print("[NOTE] Make sure viz_enhanced.py is in the src/ directory")
         return False
     
     except Exception as e:
-        print(f"❌ Test failed: {e}")
+        print(f"ERROR Test failed: {e}")
         return False
 
 def main():
@@ -167,14 +167,14 @@ def main():
     success = test_enhanced_visualization_suite()
     
     if success:
-        print("\n🎉 ALL TESTS PASSED!")
-        print("✅ Enhanced visualization suite is ready for production use")
-        print("📋 Next steps:")
+        print("\n[SUCCESS] ALL TESTS PASSED!")
+        print("SUCCESS Enhanced visualization suite is ready for production use")
+        print("[NEXT] Next steps:")
         print("   1. Run notebooks with enhanced visualizations")
         print("   2. Review generated test figures")
         print("   3. Install plotly for full interactive capabilities")
     else:
-        print("\n❌ TESTS FAILED!")
+        print("\nERROR TESTS FAILED!")
         print(" Please check error messages and fix issues")
     
     return success
