@@ -63,7 +63,8 @@
       "Bash(git rm:*)",
       "Bash(powershell:*)",
       "mcp__ide__executeCode",
-      "Bash(echo:*)"
+      "Bash(echo:*)",
+      "Bash(cloc:*)"
     ],
     "deny": [],
     "ask": [],
